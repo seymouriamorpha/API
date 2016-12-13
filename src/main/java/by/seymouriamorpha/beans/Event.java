@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,13 +15,14 @@ import java.util.List;
 public class Event {
 
     @Id private @Nullable String id;
-    @Field(value = "title")     private String title;
-    @Field(value = "creatorId") private String creatorId;
-    @Field(value = "lat")       private String lat;
-    @Field(value = "lon")       private String lon;
-    @Field(value = "time")      private LocalDateTime time;
-    @Field(value = "members")   private List<User> members;
-    @Field(value = "tags")      private String[] tags;
+    @Field(value = "title")         private String title;
+    @Field(value = "creatorId")     private String creatorId;
+    @Field(value = "lat")           private String lat;
+    @Field(value = "lon")           private String lon;
+    @Field(value = "creationTime")  private LocalDateTime creationTime;
+    @Field(value = "eventTime")     private LocalDateTime eventTime;
+    @Field(value = "members")       private List<User> members;
+    @Field(value = "tags")          private String[] tags;
 
     public String getId() {
         return id;
@@ -59,11 +59,18 @@ public class Event {
         this.lon = lon;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getCreationTime() {
+        return creationTime;
     }
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public LocalDateTime getEventTime() {
+        return eventTime;
+    }
+    public void setEventTime(LocalDateTime eventTime) {
+        this.eventTime = eventTime;
     }
 
     public List<User> getMembers() {

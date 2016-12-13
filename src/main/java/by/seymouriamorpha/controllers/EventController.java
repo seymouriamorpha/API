@@ -67,7 +67,7 @@ public class EventController {
             error.setMessage(ErrorMessages.VALIDATION_ERROR);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
-        event.setTime(LocalDateTime.now());
+        event.setCreationTime(LocalDateTime.now());
         List<User> members = new ArrayList<>();
         members.add(userRepository.findOne(event.getCreatorId()));
         event.setMembers(members);
