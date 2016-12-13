@@ -13,4 +13,6 @@ public final class ErrorMessages {
 
     public static final String EVENT_NOT_FOUND = "Event not found.";
 
+    public static final String MISMATCH_IDS = "URL's ID and BODY's ID are not the same.";
+
 }

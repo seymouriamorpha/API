@@ -77,7 +77,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/id/{id}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
     public @ResponseBody
     ResponseEntity<Object> updateUserById(@PathVariable String id, @Valid @RequestBody() User user, BindingResult br){
         if (br.hasErrors()) {
@@ -89,6 +89,11 @@ public class UserController {
             Error error = new Error();
             error.setMessage(ErrorMessages.USER_NOT_FOUND);
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+        if (!id.equals(user.getId())){
+            Error error = new Error();
+            error.setMessage(ErrorMessages.MISMATCH_IDS);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
         repository.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
