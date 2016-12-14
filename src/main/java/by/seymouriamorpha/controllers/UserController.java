@@ -1,7 +1,6 @@
 package by.seymouriamorpha.controllers;
 
 import by.seymouriamorpha.beans.User;
-import by.seymouriamorpha.beans.errors.Error;
 import by.seymouriamorpha.beans.errors.ErrorMessages;
 import by.seymouriamorpha.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import java.net.URISyntaxException;
  */
 @RestController
 @RequestMapping("users")
-public class UserController {
+public class UserController implements AbstractController {
 
     @Autowired
     private UserRepository repository;
@@ -35,14 +34,10 @@ public class UserController {
     public @ResponseBody
     ResponseEntity<Object> insert(@Valid @RequestBody() User user, BindingResult br) throws URISyntaxException {
         if (br.hasErrors()) {
-            Error error = new Error();
-            error.setMessage(ErrorMessages.VALIDATION_ERROR);
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return error(ErrorMessages.VALIDATION_ERROR, HttpStatus.BAD_REQUEST);
         }
         if (repository.findByEmail(user.getEmail()) != null){
-            Error error = new Error();
-            error.setMessage(ErrorMessages.USER_ALREADY_EXISTS);
-            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+            return error(ErrorMessages.USER_ALREADY_EXISTS, HttpStatus.CONFLICT);
         }
         repository.save(user);
         HttpHeaders headers = new HttpHeaders();
@@ -56,9 +51,7 @@ public class UserController {
     ResponseEntity<Object> getUser(@PathVariable String id){
         User user = repository.findOne(id);
         if (user == null){
-            Error error = new Error();
-            error.setMessage(ErrorMessages.USER_NOT_FOUND);
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
@@ -68,19 +61,13 @@ public class UserController {
     public @ResponseBody
     ResponseEntity<Object> updateUserById(@PathVariable String id, @Valid @RequestBody() User user, BindingResult br){
         if (br.hasErrors()) {
-            Error error = new Error();
-            error.setMessage(ErrorMessages.VALIDATION_ERROR);
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return error(ErrorMessages.VALIDATION_ERROR,HttpStatus.BAD_REQUEST);
         }
         if (repository.findOne(id) == null) {
-            Error error = new Error();
-            error.setMessage(ErrorMessages.USER_NOT_FOUND);
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         if (!id.equals(user.getId())){
-            Error error = new Error();
-            error.setMessage(ErrorMessages.MISMATCH_IDS);
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return error(ErrorMessages.MISMATCH_IDS, HttpStatus.BAD_REQUEST);
         }
         User upd = repository.findOne(id);
         if (user.getForename() != null){ upd.setForename(user.getForename()); }
@@ -95,9 +82,7 @@ public class UserController {
     public @ResponseBody
     ResponseEntity<Object> deleteById(@PathVariable String id){
         if (repository.findOne(id) == null) {
-            Error error = new Error();
-            error.setMessage(ErrorMessages.USER_NOT_FOUND);
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         repository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

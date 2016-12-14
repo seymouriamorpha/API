@@ -2,7 +2,6 @@ package by.seymouriamorpha.controllers;
 
 import by.seymouriamorpha.beans.Event;
 import by.seymouriamorpha.beans.User;
-import by.seymouriamorpha.beans.errors.Error;
 import by.seymouriamorpha.beans.errors.ErrorMessages;
 import by.seymouriamorpha.repositories.EventRepository;
 import by.seymouriamorpha.repositories.UserRepository;
@@ -22,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("events")
-public class EventController {
+public class EventController implements AbstractController {
 
     @Autowired
     private EventRepository eventRepository;
@@ -32,7 +31,7 @@ public class EventController {
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<Object> getAllEvents() {
-        return new ResponseEntity<>(eventRepository.findAll(),  HttpStatus.OK);
+        return new ResponseEntity<>(eventRepository.findAll(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
@@ -40,21 +39,16 @@ public class EventController {
     ResponseEntity<Object> getEvent(@PathVariable String id){
         Event event = eventRepository.findOne(id);
         if (event == null){
-            Error error = new Error();
-            error.setMessage(ErrorMessages.EVENT_NOT_FOUND);
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(event, HttpStatus.OK);
+            return error(ErrorMessages.EVENT_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/creator/{id}", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<Object> findByCreatorId(@PathVariable String creatorId){
         if (userRepository.findOne(creatorId) == null){
-            Error error = new Error();
-            error.setMessage(ErrorMessages.USER_NOT_FOUND);
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(eventRepository.findByCreatorId(creatorId), HttpStatus.OK);
     }
@@ -63,9 +57,7 @@ public class EventController {
     public @ResponseBody
     ResponseEntity<Object> insert(@Valid @RequestBody() Event event, BindingResult br){
         if (br.hasErrors()) {
-            Error error = new Error();
-            error.setMessage(ErrorMessages.VALIDATION_ERROR);
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            return error(ErrorMessages.VALIDATION_ERROR, HttpStatus.BAD_REQUEST);
         }
         event.setCreationTime(LocalDateTime.now());
         List<User> members = new ArrayList<>();
