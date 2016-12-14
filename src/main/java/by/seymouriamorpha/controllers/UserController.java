@@ -51,23 +51,10 @@ public class UserController {
         return new ResponseEntity<>(user, headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public @ResponseBody
     ResponseEntity<Object> getUser(@PathVariable String id){
         User user = repository.findOne(id);
-        if (user == null){
-            Error error = new Error();
-            error.setMessage(ErrorMessages.USER_NOT_FOUND);
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-    }
-
-    @RequestMapping(value = "/email/{email}", method = RequestMethod.GET)
-    public @ResponseBody
-    ResponseEntity<Object> getUserByEmail(@PathVariable String email){
-        User user = repository.findByEmail(email);
         if (user == null){
             Error error = new Error();
             error.setMessage(ErrorMessages.USER_NOT_FOUND);
@@ -95,11 +82,16 @@ public class UserController {
             error.setMessage(ErrorMessages.MISMATCH_IDS);
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
-        repository.save(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        User upd = repository.findOne(id);
+        if (user.getForename() != null){ upd.setForename(user.getForename()); }
+        if (user.getSurname() != null){ upd.setSurname(user.getSurname()); }
+        if (user.getEmail() != null){ upd.setEmail(user.getEmail()); }
+        if (user.getToken() != null){ upd.setToken(user.getToken()); }
+        repository.save(upd);
+        return new ResponseEntity<>(upd, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/id/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public @ResponseBody
     ResponseEntity<Object> deleteById(@PathVariable String id){
         if (repository.findOne(id) == null) {
