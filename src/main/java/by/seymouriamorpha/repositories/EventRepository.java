@@ -6,14 +6,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 /**
- * @author seymouriamorpha on 12/13/2016.
+ * @author Eugene_Kortelyov on 12/13/2016.
  */
-public interface EventRepository extends MongoRepository<Event, String> {
+public interface EventRepository extends MongoRepository<Event, String>
+{
 
     List<Event> findAll();
 
     List<Event> findByCreatorId(String creatorId);
-
-
 
 }

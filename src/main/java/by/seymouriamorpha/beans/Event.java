@@ -9,10 +9,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @author seymouriamorpha on 12/13/2016.
+ * @author Eugene_Kortelyov on 12/13/2016.
  */
 @Document(collection = "events")
-public class Event {
+public class Event
+{
 
     @Id private @Nullable String id;
     @Field(value = "title")         private String title;
@@ -24,66 +25,84 @@ public class Event {
     @Field(value = "members")       private List<User> members;
     @Field(value = "tags")          private String[] tags;
 
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
-    public void setId(String id) {
+    public void setId(String id)
+    {
         this.id = id;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public String getCreatorId() {
+    public String getCreatorId()
+    {
         return creatorId;
     }
-    public void setCreatorId(String creatorId) {
+    public void setCreatorId(String creatorId)
+    {
         this.creatorId = creatorId;
     }
 
-    public String getLat() {
+    public String getLat()
+    {
         return lat;
     }
-    public void setLat(String lat) {
+    public void setLat(String lat)
+    {
         this.lat = lat;
     }
 
-    public String getLon() {
+    public String getLon()
+    {
         return lon;
     }
-    public void setLon(String lon) {
+    public void setLon(String lon)
+    {
         this.lon = lon;
     }
 
-    public LocalDateTime getCreationTime() {
+    public LocalDateTime getCreationTime()
+    {
         return creationTime;
     }
-    public void setCreationTime(LocalDateTime creationTime) {
+    public void setCreationTime(LocalDateTime creationTime)
+    {
         this.creationTime = creationTime;
     }
 
-    public LocalDateTime getEventTime() {
+    public LocalDateTime getEventTime()
+    {
         return eventTime;
     }
-    public void setEventTime(LocalDateTime eventTime) {
+    public void setEventTime(LocalDateTime eventTime)
+    {
         this.eventTime = eventTime;
     }
 
-    public List<User> getMembers() {
+    public List<User> getMembers()
+    {
         return members;
     }
-    public void setMembers(List<User> members) {
+    public void setMembers(List<User> members)
+    {
         this.members = members;
     }
 
-    public String[] getTags() {
+    public String[] getTags()
+    {
         return tags;
     }
-    public void setTags(String[] tags) {
+    public void setTags(String[] tags)
+    {
         this.tags = tags;
     }
 
