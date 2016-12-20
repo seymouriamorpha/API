@@ -89,7 +89,7 @@ public class EventController implements AbstractController
     public @ResponseBody
     ResponseEntity<Object> findNearest(@RequestParam String lon, @RequestParam String lat)
     {
-        List<Event> events = eventRepository.findByCoordinateNear(
+        List<Event> events = eventRepository.findByPointNear(
                 new Point(Double.parseDouble(lat), Double.parseDouble(lon)),
                 new Distance(0.3, Metrics.KILOMETERS));
         return new ResponseEntity<>(events, HttpStatus.OK);
