@@ -1,6 +1,5 @@
 package by.seymouriamorpha.repositories;
 
-import by.seymouriamorpha.beans.Coordinate;
 import by.seymouriamorpha.beans.Event;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
