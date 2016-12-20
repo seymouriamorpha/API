@@ -112,7 +112,7 @@ public class UserController implements AbstractController
             return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
         repository.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

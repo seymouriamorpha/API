@@ -1,6 +1,9 @@
 package by.seymouriamorpha.repositories;
 
+import by.seymouriamorpha.beans.Coordinate;
 import by.seymouriamorpha.beans.Event;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -14,5 +17,7 @@ public interface EventRepository extends MongoRepository<Event, String>
     List<Event> findAll();
 
     List<Event> findByCreatorId(String creatorId);
+
+    List<Event> findByCoordinateNear(Point point, Distance distance);
 
 }

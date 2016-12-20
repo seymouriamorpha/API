@@ -2,6 +2,7 @@ package by.seymouriamorpha.beans;
 
 import com.sun.istack.internal.Nullable;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -18,11 +19,10 @@ public class Event
     @Id private @Nullable String id;
     @Field(value = "title")         private String title;
     @Field(value = "creatorId")     private String creatorId;
-    @Field(value = "lat")           private String lat;
-    @Field(value = "lon")           private String lon;
+    @Field(value = "point")         private Point point;
     @Field(value = "creationTime")  private LocalDateTime creationTime;
     @Field(value = "eventTime")     private LocalDateTime eventTime;
-    @Field(value = "members")       private List<User> members;
+    @Field(value = "members")       private List<String> members;
     @Field(value = "tags")          private String[] tags;
 
     public String getId()
@@ -52,22 +52,11 @@ public class Event
         this.creatorId = creatorId;
     }
 
-    public String getLat()
-    {
-        return lat;
+    public Point getPoint() {
+        return point;
     }
-    public void setLat(String lat)
-    {
-        this.lat = lat;
-    }
-
-    public String getLon()
-    {
-        return lon;
-    }
-    public void setLon(String lon)
-    {
-        this.lon = lon;
+    public void setPoint(Point point) {
+        this.point = point;
     }
 
     public LocalDateTime getCreationTime()
@@ -88,11 +77,11 @@ public class Event
         this.eventTime = eventTime;
     }
 
-    public List<User> getMembers()
+    public List<String> getMembers()
     {
         return members;
     }
-    public void setMembers(List<User> members)
+    public void setMembers(List<String> members)
     {
         this.members = members;
     }

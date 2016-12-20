@@ -1,18 +1,17 @@
 package by.seymouriamorpha.controllers;
 
 import by.seymouriamorpha.beans.Event;
-import by.seymouriamorpha.beans.User;
-import by.seymouriamorpha.beans.errors.Error;
 import by.seymouriamorpha.beans.errors.ErrorMessages;
 import by.seymouriamorpha.repositories.EventRepository;
 import by.seymouriamorpha.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,9 @@ public class EventController implements AbstractController
     public @ResponseBody
     ResponseEntity<Object> getAllEvents()
     {
-        return new ResponseEntity<>(new Error(ErrorMessages.REJECTED), HttpStatus.BAD_REQUEST);
+        // temporary - for debugging
+        // return new ResponseEntity<>(new Error(ErrorMessages.REJECTED), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(eventRepository.findAll(), HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -62,18 +63,36 @@ public class EventController implements AbstractController
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.POST)
     public @ResponseBody
-    ResponseEntity<Object> insert(@Valid @RequestBody() Event event, BindingResult br)
+    ResponseEntity<Object> insert(@RequestBody() Event event)
     {
-        if (br.hasErrors())
-        {
-            return error(ErrorMessages.VALIDATION_ERROR, HttpStatus.BAD_REQUEST);
-        }
         event.setCreationTime(LocalDateTime.now());
-        List<User> members = new ArrayList<>();
-        members.add(userRepository.findOne(event.getCreatorId()));
+        List<String> members = new ArrayList<>();
+        members.add(event.getCreatorId());
         event.setMembers(members);
         eventRepository.save(event);
         return new ResponseEntity<>(event, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody
+    ResponseEntity<Object> delete(@PathVariable String id)
+    {
+        if (eventRepository.findOne(id) == null)
+        {
+            return error(ErrorMessages.EVENT_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        eventRepository.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseEntity<Object> findNearest(@RequestParam String lon, @RequestParam String lat)
+    {
+        List<Event> events = eventRepository.findByCoordinateNear(
+                new Point(Double.parseDouble(lat), Double.parseDouble(lon)),
+                new Distance(0.3, Metrics.KILOMETERS));
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
 }

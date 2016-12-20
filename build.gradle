@@ -27,6 +27,6 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-rest")
     compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-    compile 'org.springframework.security:spring-security-web:4.2.1.BUILD-SNAPSHOT'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.3.0-rc1'
+    compile("org.springframework.security:spring-security-web:4.2.1.BUILD-SNAPSHOT")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.1")
 }
