@@ -20,5 +20,5 @@ public class Application
 // For running MongoDB locally:
 //"C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --dbpath d:\workspace\mongodb\data (link to DB)
 
-//db.events.createIndex({ "point": "2d" })
+//db.port.createIndex( { point: "2dsphere" })
 //http://localhost:8080/events/search?x=52&y=32&distance=1

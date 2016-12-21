@@ -91,7 +91,7 @@ public class EventController implements AbstractController
     {
         List<Event> events = eventRepository.findByPointNear(
                 new Point(Double.parseDouble(x), Double.parseDouble(y)),
-                new Distance(Double.parseDouble(distance)));
+                new Distance(Double.parseDouble(distance), Metrics.KILOMETERS));
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 

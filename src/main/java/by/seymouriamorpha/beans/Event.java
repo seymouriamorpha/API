@@ -2,6 +2,8 @@ package by.seymouriamorpha.beans;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -20,7 +22,7 @@ public class Event
     String id;
     @Field(value = "title")         private String title;
     @Field(value = "creatorId")     private String creatorId;
-    @Field(value = "point")         private Point point;
+    @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE) @Field(value = "point")         private Point point;
     @Field(value = "creationTime")  private LocalDateTime creationTime;
     @Field(value = "eventTime")     private LocalDateTime eventTime;
     @Field(value = "members")       private List<String> members;
