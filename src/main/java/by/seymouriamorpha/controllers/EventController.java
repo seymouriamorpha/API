@@ -35,7 +35,7 @@ public class EventController implements AbstractController
     {
         // temporary - for debugging
         // return new ResponseEntity<>(new Error(ErrorMessages.REJECTED), HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(eventRepository.findAll(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(eventRepository.findAll(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -54,7 +54,7 @@ public class EventController implements AbstractController
     public @ResponseBody
     ResponseEntity<Object> findByCreatorId(@PathVariable String creatorId)
     {
-        if (userRepository.findOne(creatorId) == null)
+        if (!userRepository.exists(creatorId))
         {
             return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -77,7 +77,7 @@ public class EventController implements AbstractController
     public @ResponseBody
     ResponseEntity<Object> delete(@PathVariable String id)
     {
-        if (eventRepository.findOne(id) == null)
+        if (!eventRepository.exists(id))
         {
             return error(ErrorMessages.EVENT_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -95,4 +95,25 @@ public class EventController implements AbstractController
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
+    @RequestMapping(value = {"/{eventId}/members/{memberId}"}, method = RequestMethod.POST)
+    public @ResponseBody
+    ResponseEntity<Object> addMember(@PathVariable("eventId") String eventId, @PathVariable("memberId") String memberId)
+    {
+        Event event = eventRepository.findOne(eventId);
+        if (event == null)
+        {
+            return error(ErrorMessages.EVENT_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        if(!userRepository.exists(memberId))
+        {
+            return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        if(event.getMembers().contains(memberId))
+        {
+            new ResponseEntity<>(event, HttpStatus.SEE_OTHER);
+        }
+        event.getMembers().add(memberId);
+
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
 }

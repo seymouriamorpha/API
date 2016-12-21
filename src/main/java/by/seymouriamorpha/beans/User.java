@@ -1,9 +1,10 @@
 package by.seymouriamorpha.beans;
 
-import com.sun.istack.internal.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Eugene_Kortelyov on 12/13/2016.
