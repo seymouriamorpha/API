@@ -17,6 +17,6 @@ public interface EventRepository extends MongoRepository<Event, String>
 
     List<Event> findByCreatorId(String creatorId);
 
-    List<Event> findByPointNear(Point point, Distance distance);
+    List<Event> findByPointNear(Point point, Distance max);
 
 }

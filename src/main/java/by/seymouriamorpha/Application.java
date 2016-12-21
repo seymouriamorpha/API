@@ -19,3 +19,6 @@ public class Application
 
 // For running MongoDB locally:
 //"C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --dbpath d:\workspace\mongodb\data (link to DB)
+
+// need create index for DB
+// db.events.createIndex({point: "2dsphere"})
