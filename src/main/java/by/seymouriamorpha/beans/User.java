@@ -1,9 +1,10 @@
 package by.seymouriamorpha.beans;
 
-import com.sun.istack.internal.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Eugene_Kortelyov on 12/13/2016.
@@ -12,7 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class User
 {
 
-    @Id private @Nullable String id;
+    @Id private @Nullable
+    String id;
     @Field(value = "forename")  private String forename;
     @Field(value = "surname")   private String surname;
     @Field(value = "email")     private String email;

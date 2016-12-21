@@ -1,11 +1,11 @@
 package by.seymouriamorpha.beans;
 
-import com.sun.istack.internal.Nullable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +16,8 @@ import java.util.List;
 public class Event
 {
 
-    @Id private @Nullable String id;
+    @Id private @Nullable
+    String id;
     @Field(value = "title")         private String title;
     @Field(value = "creatorId")     private String creatorId;
     @Field(value = "point")         private Point point;
