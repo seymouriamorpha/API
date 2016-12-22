@@ -1,3 +1,15 @@
+<details>
+    <summary> TODO </summary>
+- [ ] Обновить документацию
+- [ ] Добавить функционал для работы с тэгами (для пользователя тоже)
+- [x] Добавить функционал для добавления пользователя к событию
+- [ ] Переделать временной функционал (через расписание, а не таймстампы)
+- [ ] Глобальные события ? Добавить дополнительное boolean поле - для удобства поиска. Глобальным считается событие в пределах города, например, или страны
+- [ ] Сделать регистрацию по номеру телефона. Добавить поле номера + статус пользователя. Если пользователь банится в случае каких-либо нарушений, то он просто помечается в базе и повторная регистрация невозможна.
+</details>
+
+---
+
 <b>
     <h1 align="center"> API Contracts </h1>
 </b>
@@ -141,8 +153,38 @@
     <p> Request: GET to <i>APPLICATION_URL/events/creator/{creatorId}</i>
     <p> Successful response example:
     <pre>
-    {
-    }
+    [
+        {
+            "id": "585a7ff44444821734e47313",
+            "title": "MarketPlace",
+            "creatorId": "584fe19a4444822a640c0266",
+            "point": {
+              "x": 30.931415,
+              "y": 52.407222
+            },
+            "creationTime": "2016-12-21T16:13:24.986",
+            "eventTime": "2016-12-27T09:00",
+            "members": [
+              "584fe19a4444822a640c0266"
+            ],
+            "tags": null
+        },
+        {
+            "id": "585a80194444821734e47314",
+            "title": "EPAM Smoking Party",
+            "creatorId": "584fe19a4444822a640c0266",
+            "point": {
+              "x": 30.921132,
+              "y": 52.404988
+            },
+            "creationTime": "2016-12-21T16:14:01.834",
+            "eventTime": "2016-12-27T09:00",
+            "members": [
+              "584fe19a4444822a640c0266"
+            ],
+            "tags": null
+        }
+    ]
     </pre>
 </details>
 
@@ -152,15 +194,95 @@
     <pre>
     {
         "title":"EPAM Smoking Party",
-        "creatorId":"584f061820379b0b84cd2b1b",
-        "lat":"52.404999",
-        "lon":"30.921104",
-        "eventTime":
+        "creatorId": "584fe19a4444822a640c0266",
+        "point": {
+          "x": "30.921132",
+          "y": "52.404988"
+        },
+        "eventTime":"2016-12-27T09:00:00"
     }
     </pre>
     <p> Successful response example:
     <pre>
     {
+        "id": "585a80194444821734e47314",
+        "title": "EPAM Smoking Party",
+        "creatorId": "584fe19a4444822a640c0266",
+        "point": {
+            "x": 30.921132,
+            "y": 52.404988
+        },
+        "creationTime": "2016-12-21T16:14:01.834",
+        "eventTime": "2016-12-27T09:00",
+        "members": [
+            "584fe19a4444822a640c0266"
+        ],
+        "tags": null
+    }
+    </pre>
+</details>
+
+<details>
+    <summary> Get nearest events </summary>
+    <p> Request: GET to <i>APPLICATION_URL/events</i> with parameters
+    <p> Example: <i>APPLICATION_URL/events/search?x=30.921019&y=52.405134&distance=1</i>
+    <p> where x - Longitude , y - Latitude
+    <p> Successful response example:
+    <pre>
+    [
+        {
+            "id": "585a80194444821734e47314",
+            "title": "EPAM Smoking Party",
+            "creatorId": "584fe19a4444822a640c0266",
+            "point": {
+                "x": 30.921132,
+                "y": 52.404988
+            },
+            "creationTime": "2016-12-21T16:14:01.834",
+            "eventTime": "2016-12-27T09:00",
+            "members": [
+                "584fe19a4444822a640c0266"
+            ],
+            "tags": null
+        },
+        {
+            "id": "585a7ff44444821734e47313",
+            "title": "MarketPlace",
+            "creatorId": "584fe19a4444822a640c0266",
+            "point": {
+                "x": 30.931415,
+                "y": 52.407222
+            },
+            "creationTime": "2016-12-21T16:13:24.986",
+            "eventTime": "2016-12-27T09:00",
+            "members": [
+                "584fe19a4444822a640c0266"
+            ],
+            "tags": null
+        }
+    ]
+    </pre>
+</details>
+
+<details>
+    <summary> Add user to event </summary>
+    <p> Request: POST to <i>APPLICATION_URL/{eventId}/members/{memberId}</i>
+    <p> Successful response example:
+    <pre>
+    {
+        "id": "585a80194444821734e47314",
+        "title": "EPAM Smoking Party",
+        "creatorId": "584fe19a4444822a640c0266",
+        "point": {
+            "x": 30.921132,
+            "y": 52.404988
+        },
+        "creationTime": "2016-12-21T16:14:01.834",
+        "eventTime": "2016-12-27T09:00",
+        "members": [
+            "584fe19a4444822a640c0266"
+        ],
+        "tags": null
     }
     </pre>
 </details>
