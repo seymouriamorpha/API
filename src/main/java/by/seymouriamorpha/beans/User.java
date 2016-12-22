@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author Eugene_Kortelyov on 12/13/2016.
@@ -18,6 +19,7 @@ public class User
     @Field(value = "surname")   private String surname;
     @Field(value = "email")     private String email;
     @Field(value = "token")     private String token;
+    @Field(value = "tags")      private List<String> tags;
 
     public String getId()
     {
@@ -64,4 +66,10 @@ public class User
         this.token = token;
     }
 
+    public List<String> getTags() {
+        return tags;
+    }
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
 }

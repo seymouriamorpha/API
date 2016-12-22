@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import javax.annotation.Nullable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Eugene_Kortelyov on 12/13/2016.
@@ -26,7 +27,7 @@ public class Event
     @Field(value = "creationTime")  private LocalDateTime creationTime;
     @Field(value = "eventTime")     private LocalDateTime eventTime;
     @Field(value = "members")       private List<String> members;
-    @Field(value = "tags")          private String[] tags;
+    @Field(value = "tags")          private List<String> tags;
 
     public String getId()
     {
@@ -89,11 +90,11 @@ public class Event
         this.members = members;
     }
 
-    public String[] getTags()
+    public List<String> getTags()
     {
         return tags;
     }
-    public void setTags(String[] tags)
+    public void setTags(List<String> tags)
     {
         this.tags = tags;
     }

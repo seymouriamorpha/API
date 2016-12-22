@@ -1,6 +1,8 @@
 package by.seymouriamorpha.controllers;
 
+import by.seymouriamorpha.beans.DataList;
 import by.seymouriamorpha.beans.Event;
+import by.seymouriamorpha.beans.User;
 import by.seymouriamorpha.beans.errors.ErrorMessages;
 import by.seymouriamorpha.repositories.EventRepository;
 import by.seymouriamorpha.repositories.UserRepository;
@@ -10,11 +12,15 @@ import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Eugene_Kortelyov on 12/13/2016.
@@ -67,6 +73,11 @@ public class EventController implements AbstractController
     {
         event.setCreationTime(LocalDateTime.now());
         List<String> members = new ArrayList<>();
+        final String creatorId = event.getCreatorId();
+        if(null==creatorId || !userRepository.exists(creatorId))
+        {
+            return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
         members.add(event.getCreatorId());
         event.setMembers(members);
         eventRepository.save(event);
@@ -99,7 +110,7 @@ public class EventController implements AbstractController
     public @ResponseBody
     ResponseEntity<Object> addMember(@PathVariable("eventId") String eventId, @PathVariable("memberId") String memberId)
     {
-        Event event = eventRepository.findOne(eventId);
+        final Event event = eventRepository.findOne(eventId);
         if (event == null)
         {
             return error(ErrorMessages.EVENT_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -113,7 +124,36 @@ public class EventController implements AbstractController
             new ResponseEntity<>(event, HttpStatus.SEE_OTHER);
         }
         event.getMembers().add(memberId);
+        eventRepository.save(event);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
 
+    @RequestMapping(value = {"/{eventId}/members/{memberId}"}, method = RequestMethod.DELETE)
+    public @ResponseBody
+    ResponseEntity<Object> removeMember(@PathVariable("eventId") String eventId, @PathVariable("memberId") String memberId)
+    {
+        final Event event = eventRepository.findOne(eventId);
+        if (event == null)
+        {
+            return error(ErrorMessages.EVENT_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        event.getMembers().remove(memberId);
+        eventRepository.save(event);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = {"/{eventId}/tags"}, method = RequestMethod.PATCH)
+    public @ResponseBody
+    ResponseEntity<Object> updateTags(@PathVariable("eventId") String eventId, @RequestBody() DataList<String> tags)
+    {
+        final Event event = eventRepository.findOne(eventId);
+        if (event == null)
+        {
+            return error(ErrorMessages.EVENT_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        event.setTags(tags);
+        eventRepository.save(event);
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 }

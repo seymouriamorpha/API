@@ -1,5 +1,6 @@
 package by.seymouriamorpha.controllers;
 
+import by.seymouriamorpha.beans.DataList;
 import by.seymouriamorpha.beans.User;
 import by.seymouriamorpha.beans.errors.ErrorMessages;
 import by.seymouriamorpha.repositories.UserRepository;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * @author Eugene_Kortelyov on 12/13/2016.
@@ -74,7 +76,8 @@ public class UserController implements AbstractController
         {
             return error(ErrorMessages.VALIDATION_ERROR,HttpStatus.BAD_REQUEST);
         }
-        if (repository.findOne(id) == null)
+        final User upd = repository.findOne(id);
+        if (upd == null)
         {
             return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -82,7 +85,6 @@ public class UserController implements AbstractController
         {
             return error(ErrorMessages.MISMATCH_IDS, HttpStatus.BAD_REQUEST);
         }
-        User upd = repository.findOne(id);
         if (user.getForename() != null)
         {
             upd.setForename(user.getForename());
@@ -107,7 +109,7 @@ public class UserController implements AbstractController
     public @ResponseBody
     ResponseEntity<Object> deleteById(@PathVariable String id)
     {
-        if (repository.findOne(id) == null)
+        if (!repository.exists(id))
         {
             return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -115,4 +117,17 @@ public class UserController implements AbstractController
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @RequestMapping(value = {"/{userId}/tags"}, method = RequestMethod.PATCH)
+    public @ResponseBody
+    ResponseEntity<Object> updateTags(@PathVariable("userId") String userId, @RequestBody() DataList<String> tags)
+    {
+        final User user = repository.findOne(userId);
+        if (user == null)
+        {
+            return error(ErrorMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        user.setTags(tags);
+        repository.save(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 }
